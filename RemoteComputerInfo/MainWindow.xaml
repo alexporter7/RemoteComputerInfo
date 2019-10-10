@@ -5,16 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteComputerInfo"
         mc:Ignorable="d"
-        Title="Remote Computer Info" Height="450" Width="800">
+        Title="Remote Computer Info" Height="579.098" Width="1463.934">
     <Grid>
         <Button x:Name="submitNameButton" Content="Run" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="submitNameButton_Click"/>
         <TextBox x:Name="computerNameTextbox" HorizontalAlignment="Left" Height="23" Margin="116,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label x:Name="computerNameLabel" Content="Computer Name:" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="outputTextbox" HorizontalAlignment="Left" Height="368" Margin="10,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="772"/>
+        <TextBox x:Name="outputTextbox" HorizontalAlignment="Left" Height="318" Margin="10,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
         <TextBox x:Name="usernameTextbox" HorizontalAlignment="Left" Height="23" Margin="406,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <PasswordBox x:Name="passwordTextbox" HorizontalAlignment="Left" Margin="598,12,0,0" VerticalAlignment="Top" Width="184" Height="23" PasswordChar="*"/>
         <Label Content="Username:" HorizontalAlignment="Left" Margin="335,8,0,0" VerticalAlignment="Top"/>
         <Label Content="Password:" HorizontalAlignment="Left" Margin="531,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Filter:" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="filterProgramsTextbox" HorizontalAlignment="Left" Height="23" Margin="54,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="425" TextChanged="filterProgramsTextbox_TextChanged"/>
+        <TextBox x:Name="diskInfoTextbox" HorizontalAlignment="Left" Height="318" Margin="484,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
+        <TextBox x:Name="outputTextbox_Copy1" HorizontalAlignment="Left" Height="318" Margin="958,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
+        <Label Content="Disk Info" HorizontalAlignment="Left" Margin="488,190,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

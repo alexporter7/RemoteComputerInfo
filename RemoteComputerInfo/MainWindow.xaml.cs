@@ -27,12 +27,13 @@ namespace RemoteComputerInfo {
         }
 
         private void submitNameButton_Click(object sender, RoutedEventArgs e) {
-
+            //computer name, domain, username, and password
+            //used to actually connect to a machine and authenticate
             string computerName = computerNameTextbox.Text;
             string domain = "net.ucf.edu";
             string username = usernameTextbox.Text;
             string password = passwordTextbox.Password;
-           
+
 
             SecureString securePassword = new SecureString();
             foreach (char c in password) {
@@ -48,30 +49,33 @@ namespace RemoteComputerInfo {
 
             var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
             var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
-            var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
+/*            var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
 
+            //add programs to list
             foreach (CimInstance program in allPrograms) {
-                outputTextbox.AppendText($"Program Name [{program.CimInstanceProperties["Name"].ToString()}]\n");
-            }
-
-/*            foreach (CimInstance volume in allVolumes) {
-                if (volume.CimInstanceProperties["DriveLetter"].ToString()[0] > ' ') {
-                    Console.WriteLine("Volume [{0}] has [{1}] bytes total and [{2}] bytes available",
-                        volume.CimInstanceProperties["DriveLetter"],
-                        volume.CimInstanceProperties["Size"],
-                        volume.CimInstanceProperties["SizeRemaining"]);
-                }
-            }
-
-            foreach (CimInstance onePDisk in allPDisks) {
-                // Show physical disk information
-                Console.WriteLine("\n\nDisk {0}\n is model {1},\n serial number {2}\n\n",
-                                  onePDisk.CimInstanceProperties["DeviceId"],
-                                  onePDisk.CimInstanceProperties["Model"].ToString().TrimEnd(),
-                                  onePDisk.CimInstanceProperties["SerialNumber"]);
+                outputTextbox.AppendText(program.CimInstanceProperties["Name"].ToString() + "\n");
             }*/
 
+            foreach (CimInstance pDisk in allPDisks) {
+                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
+                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
+                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
+                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
+                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
+            }
 
+        }
+
+        private void filterProgramsTextbox_TextChanged(object sender, TextChangedEventArgs e) {
+
+            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            //outputTextbox.Text = "";
+
+            foreach (string line in lines) {
+                if (line.Contains(filterProgramsTextbox.Text)) {
+                    outputTextbox.AppendText(line);
+                }
+            }
 
         }
     }
