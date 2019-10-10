@@ -78,14 +78,18 @@ namespace RemoteComputerInfo {
             if (computerInfoCheckbox.IsChecked == true) {
                 var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
                 foreach (CimInstance os in allOS) {
-
+                    //======= Available Memory =======
                     string availableMemory = Convert.ToString(Convert.ToDouble(os.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 10));
                     availableMemory = Convert.ToString(Math.Round(Convert.ToDouble(availableMemory), 0, MidpointRounding.AwayFromZero));
-                    
+                    //======= Last Boot Up Time =======
+                    DateTime lastBootUpTimeDate = Convert.ToDateTime(os.CimInstanceProperties["LastBootUpTime"].Value);
+                    string lastBootUpTime = lastBootUpTimeDate.ToString(@"yyyy-MM-dd hh:mm:ss");
+                    //======= Operating System =======
                     string osName = Convert.ToString(os.CimInstanceProperties["Caption"].Value);
 
                     computerInfoTextbox.AppendText($"Operating System: {osName} \n");
                     computerInfoTextbox.AppendText($"Free Memory [MB]: {availableMemory}\n");
+                    computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}");
 
 
                     //computerInfoTextbox.AppendText(Convert.ToString(totalVisableMemorySize));
