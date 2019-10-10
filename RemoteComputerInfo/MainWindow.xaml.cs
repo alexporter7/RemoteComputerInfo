@@ -48,34 +48,39 @@ namespace RemoteComputerInfo {
             CimSession Session = CimSession.Create(computerName, SessionOptions);
 
             var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
-            var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
-/*            var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
 
-            //add programs to list
-            foreach (CimInstance program in allPrograms) {
-                outputTextbox.AppendText(program.CimInstanceProperties["Name"].ToString() + "\n");
-            }*/
+            if (programCheckbox.IsChecked == true) {
+                var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
+                foreach (CimInstance program in allPrograms) {
+                    string text = program.CimInstanceProperties["Name"].ToString();
+                    //text = text.Substring(7);
+                    outputTextbox.AppendText(text + "\n");
+                }
+            }
 
-            foreach (CimInstance pDisk in allPDisks) {
-                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
-                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
-                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
-                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
-                diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
+            if (diskInfoCheckbox.IsChecked == true) {
+                var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
+                foreach (CimInstance pDisk in allPDisks) {
+                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
+                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
+                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
+                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
+                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
+                }
             }
 
         }
 
         private void filterProgramsTextbox_TextChanged(object sender, TextChangedEventArgs e) {
 
-            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+/*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             //outputTextbox.Text = "";
 
             foreach (string line in lines) {
                 if (line.Contains(filterProgramsTextbox.Text)) {
                     outputTextbox.AppendText(line);
                 }
-            }
+            }*/
 
         }
     }
