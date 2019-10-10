@@ -23,7 +23,7 @@
                     <TextBox x:Name="diskInfoTextbox" HorizontalAlignment="Left" Height="134" Margin="494,404,0,-38" TextWrapping="Wrap" VerticalAlignment="Top" Width="468"/>
                     <TextBox x:Name="computerInfoTextbox" HorizontalAlignment="Left" Height="154" Margin="494,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
                     <Label Content="Disk Info" HorizontalAlignment="Left" Margin="498,374,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="filterButtonSubmit" Content="Filter" HorizontalAlignment="Left" Margin="387,190,0,0" VerticalAlignment="Top" Width="92" Height="23"/>
+                    <Button x:Name="filterButtonSubmit" Content="Filter" HorizontalAlignment="Left" Margin="387,190,0,0" VerticalAlignment="Top" Width="92" Height="23" Click="filterButtonSubmit_Click"/>
                     <CheckBox x:Name="programCheckbox" Content="Programs" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="diskInfoCheckbox" Content="Disk Info" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="computerInfoCheckbox" Content="Computer Info" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>

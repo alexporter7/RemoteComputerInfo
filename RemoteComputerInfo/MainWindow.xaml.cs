@@ -82,6 +82,9 @@ namespace RemoteComputerInfo {
             //======================================= COMPUTER INFO ===================================================
             if (computerInfoCheckbox.IsChecked == true) {
                 var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+                var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+
+                //============== allOS ==============
                 foreach (CimInstance os in allOS) {
                     //======= Available Memory =======
                     string availableMemory = Convert.ToString(Convert.ToDouble(os.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 10));
@@ -103,8 +106,17 @@ namespace RemoteComputerInfo {
                     computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}\n");
                     computerInfoTextbox.AppendText($"OS Install Date: {osInstall}\n");
 
+                }
 
-                    //computerInfoTextbox.AppendText(Convert.ToString(totalVisableMemorySize));
+                //============== allComputerSystem ==============
+                foreach (CimInstance comp in allComputerSystem) {
+                    //======= User Logged In =======
+                    string userLoggedIn = "";
+                    try { Convert.ToString(comp.CimInstanceProperties["UserName"].Value); } catch { userLoggedIn = "None"; }
+
+
+                    computerInfoTextbox.AppendText($"User Logged In: {userLoggedIn}\n");
+
                 }
             }
         }
@@ -113,6 +125,19 @@ namespace RemoteComputerInfo {
 
 /*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             //outputTextbox.Text = "";
+
+            foreach (string line in lines) {
+                if (line.Contains(filterProgramsTextbox.Text)) {
+                    outputTextbox.AppendText(line);
+                }
+            }
+            */
+        }
+
+        private void filterButtonSubmit_Click(object sender, RoutedEventArgs e) {
+
+/*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            outputTextbox.Text = "";
 
             foreach (string line in lines) {
                 if (line.Contains(filterProgramsTextbox.Text)) {
