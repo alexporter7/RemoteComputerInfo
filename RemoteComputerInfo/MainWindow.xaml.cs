@@ -55,14 +55,19 @@ namespace RemoteComputerInfo {
 
             //var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
             //========================================== PROGRAMS ===================================================
+
+            int totalPrograms = 0;
+
             if (programCheckbox.IsChecked == true) {
                 var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
                 foreach (CimInstance program in allPrograms) {
-                    string text = program.CimInstanceProperties["Name"].ToString();
-                    //text = text.Substring(7);
+                    string text = Convert.ToString(program.CimInstanceProperties["Name"].Value);
                     outputTextbox.AppendText(text + "\n");
+                    totalPrograms++;
                 }
             }
+
+            totalLabel.Content = $"Total Programs: {totalPrograms}";
             //========================================== DISK INFO ===================================================
             if (diskInfoCheckbox.IsChecked == true) {
                 var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
@@ -86,10 +91,17 @@ namespace RemoteComputerInfo {
                     string lastBootUpTime = lastBootUpTimeDate.ToString(@"yyyy-MM-dd hh:mm:ss");
                     //======= Operating System =======
                     string osName = Convert.ToString(os.CimInstanceProperties["Caption"].Value);
+                    //======= OS Install Date =======
+                    DateTime osInstallDate = Convert.ToDateTime(os.CimInstanceProperties["InstallDate"].Value);
+                    string osInstall = osInstallDate.ToString(@"yyyy-MM-dd hh:mm:ss");
+                    //======= OS Version =======
+                    string version = Convert.ToString(os.CimInstanceProperties["Version"].Value);
 
-                    computerInfoTextbox.AppendText($"Operating System: {osName} \n");
+                    computerInfoTextbox.AppendText($"Operating System: {osName}\n");
+                    computerInfoTextbox.AppendText($"Windows Version: {version}\n");
                     computerInfoTextbox.AppendText($"Free Memory [MB]: {availableMemory}\n");
-                    computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}");
+                    computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}\n");
+                    computerInfoTextbox.AppendText($"OS Install Date: {osInstall}\n");
 
 
                     //computerInfoTextbox.AppendText(Convert.ToString(totalVisableMemorySize));

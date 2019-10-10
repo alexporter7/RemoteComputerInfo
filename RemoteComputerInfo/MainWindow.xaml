@@ -28,6 +28,7 @@
                     <CheckBox x:Name="diskInfoCheckbox" Content="Disk Info" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="computerInfoCheckbox" Content="Computer Info" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>
                     <Label Content="Computer Info" HorizontalAlignment="Left" Margin="494,187,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="totalLabel" Content="Total: 0" HorizontalAlignment="Left" Margin="11,543,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="WIP">
