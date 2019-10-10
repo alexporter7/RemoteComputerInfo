@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Management.Infrastructure;
 using Microsoft.Management.Infrastructure.Options;
+using System.Management;
 
 namespace RemoteComputerInfo {
     /// <summary>
@@ -27,6 +28,12 @@ namespace RemoteComputerInfo {
         }
 
         private void submitNameButton_Click(object sender, RoutedEventArgs e) {
+
+            //clear out the textboxes
+            outputTextbox.Text = "";
+            diskInfoTextbox.Text = "";
+            computerInfoTextbox.Text = "";
+            
             //computer name, domain, username, and password
             //used to actually connect to a machine and authenticate
             string computerName = computerNameTextbox.Text;
@@ -34,8 +41,7 @@ namespace RemoteComputerInfo {
             string username = usernameTextbox.Text;
             string password = passwordTextbox.Password;
 
-
-            SecureString securePassword = new SecureString();
+            SecureString securePassword = new SecureString(); //change the password to a secure string
             foreach (char c in password) {
                 securePassword.AppendChar(c);
             }
@@ -47,8 +53,8 @@ namespace RemoteComputerInfo {
 
             CimSession Session = CimSession.Create(computerName, SessionOptions);
 
-            var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
-
+            //var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
+            //========================================== PROGRAMS ===================================================
             if (programCheckbox.IsChecked == true) {
                 var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
                 foreach (CimInstance program in allPrograms) {
@@ -57,7 +63,7 @@ namespace RemoteComputerInfo {
                     outputTextbox.AppendText(text + "\n");
                 }
             }
-
+            //========================================== DISK INFO ===================================================
             if (diskInfoCheckbox.IsChecked == true) {
                 var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
                 foreach (CimInstance pDisk in allPDisks) {
@@ -68,7 +74,23 @@ namespace RemoteComputerInfo {
                     diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
                 }
             }
+            //======================================= COMPUTER INFO ===================================================
+            if (computerInfoCheckbox.IsChecked == true) {
+                var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+                foreach (CimInstance os in allOS) {
 
+                    string availableMemory = Convert.ToString(Convert.ToDouble(os.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 10));
+                    availableMemory = Convert.ToString(Math.Round(Convert.ToDouble(availableMemory), 0, MidpointRounding.AwayFromZero));
+                    
+                    string osName = Convert.ToString(os.CimInstanceProperties["Caption"].Value);
+
+                    computerInfoTextbox.AppendText($"Operating System: {osName} \n");
+                    computerInfoTextbox.AppendText($"Free Memory [MB]: {availableMemory}\n");
+
+
+                    //computerInfoTextbox.AppendText(Convert.ToString(totalVisableMemorySize));
+                }
+            }
         }
 
         private void filterProgramsTextbox_TextChanged(object sender, TextChangedEventArgs e) {
