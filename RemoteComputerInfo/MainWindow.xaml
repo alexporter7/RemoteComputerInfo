@@ -29,14 +29,15 @@
                     <CheckBox x:Name="computerInfoCheckbox" Content="Computer Info" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>
                     <Label Content="Computer Info" HorizontalAlignment="Left" Margin="494,187,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="totalLabel" Content="Total: 0" HorizontalAlignment="Left" Margin="11,543,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="computerNameValidLabel" Content="" HorizontalAlignment="Left" Margin="116,31,0,0" VerticalAlignment="Top" Width="200"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Remote Monitoring">
                 <Grid Background="White">
-                    <Button x:Name="runComputerButton1" Content="Connect" HorizontalAlignment="Left" Margin="250,9,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
+                    <Button x:Name="runComputerButton1" Content="Connect" HorizontalAlignment="Left" Margin="250,9,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="runComputerButton1_Click"/>
                     <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Computer Name:" VerticalAlignment="Top"/>
                     <TextBox x:Name="computerMonitoringTextbox1" HorizontalAlignment="Left" Height="23" Margin="106,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
-                    <Label x:Name="computerMonitorLabel1" Content="Waiting to Connect..." HorizontalAlignment="Left" Margin="106,32,0,0" VerticalAlignment="Top" Width="139"/>
+                    <Label x:Name="computerMonitorLabel1" Content="Waiting to Connect..." HorizontalAlignment="Left" Margin="106,32,0,0" VerticalAlignment="Top" Width="219"/>
                     <TextBox x:Name="computerMonitorInfoTextbox1" HorizontalAlignment="Left" Height="149" Margin="10,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315"/>
                     <Label Content="Output" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top"/>
                     <ProgressBar HorizontalAlignment="Left" Height="21" Margin="10,268,0,0" VerticalAlignment="Top" Width="315"/>

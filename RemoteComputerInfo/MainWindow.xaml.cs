@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Microsoft.Management.Infrastructure;
 using Microsoft.Management.Infrastructure.Options;
 using System.Management;
+using System.Net.NetworkInformation;
 
 namespace RemoteComputerInfo {
     /// <summary>
@@ -25,6 +26,40 @@ namespace RemoteComputerInfo {
         public MainWindow() {
             InitializeComponent();
             usernameTextbox.Text = "al086950admin";
+        }
+
+        public static bool validateComputerName(string name) {
+
+            if (name.Length != 10) {
+                return false;
+            }
+
+            return true;
+
+        }
+
+        public static bool pingHost(string host) {
+
+            Ping connectionResponse = new Ping();
+
+            try {
+
+                PingReply response = connectionResponse.Send(host);
+                return (response.Status == IPStatus.Success);
+
+            } catch {
+
+                return false;
+
+            } finally {
+
+                if (connectionResponse != null) {
+                    connectionResponse.Dispose();
+                }
+
+            }
+
+
         }
 
         private void submitNameButton_Click(object sender, RoutedEventArgs e) {
@@ -41,83 +76,94 @@ namespace RemoteComputerInfo {
             string username = usernameTextbox.Text;
             string password = passwordTextbox.Password;
 
-            SecureString securePassword = new SecureString(); //change the password to a secure string
-            foreach (char c in password) {
-                securePassword.AppendChar(c);
-            }
+            if (validateComputerName(computerName) == true) {
 
-            CimCredential Credentials = new CimCredential(PasswordAuthenticationMechanism.Default, domain, username, securePassword);
+                computerNameValidLabel.Content = "";
 
-            WSManSessionOptions SessionOptions = new WSManSessionOptions();
-            SessionOptions.AddDestinationCredentials(Credentials);
-
-            CimSession Session = CimSession.Create(computerName, SessionOptions);
-
-            //var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
-            //========================================== PROGRAMS ===================================================
-
-            int totalPrograms = 0;
-
-            if (programCheckbox.IsChecked == true) {
-                var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
-                foreach (CimInstance program in allPrograms) {
-                    string text = Convert.ToString(program.CimInstanceProperties["Name"].Value);
-                    outputTextbox.AppendText(text + "\n");
-                    totalPrograms++;
-                }
-            }
-
-            totalLabel.Content = $"Total Programs: {totalPrograms}";
-            //========================================== DISK INFO ===================================================
-            if (diskInfoCheckbox.IsChecked == true) {
-                var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
-                foreach (CimInstance pDisk in allPDisks) {
-                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
-                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
-                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
-                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
-                    diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
-                }
-            }
-            //======================================= COMPUTER INFO ===================================================
-            if (computerInfoCheckbox.IsChecked == true) {
-                var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
-                var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
-
-                //============== allOS ==============
-                foreach (CimInstance os in allOS) {
-                    //======= Available Memory =======
-                    string availableMemory = Convert.ToString(Convert.ToDouble(os.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 10));
-                    availableMemory = Convert.ToString(Math.Round(Convert.ToDouble(availableMemory), 0, MidpointRounding.AwayFromZero));
-                    //======= Last Boot Up Time =======
-                    DateTime lastBootUpTimeDate = Convert.ToDateTime(os.CimInstanceProperties["LastBootUpTime"].Value);
-                    string lastBootUpTime = lastBootUpTimeDate.ToString(@"yyyy-MM-dd hh:mm:ss");
-                    //======= Operating System =======
-                    string osName = Convert.ToString(os.CimInstanceProperties["Caption"].Value);
-                    //======= OS Install Date =======
-                    DateTime osInstallDate = Convert.ToDateTime(os.CimInstanceProperties["InstallDate"].Value);
-                    string osInstall = osInstallDate.ToString(@"yyyy-MM-dd hh:mm:ss");
-                    //======= OS Version =======
-                    string version = Convert.ToString(os.CimInstanceProperties["Version"].Value);
-
-                    computerInfoTextbox.AppendText($"Operating System: {osName}\n");
-                    computerInfoTextbox.AppendText($"Windows Version: {version}\n");
-                    computerInfoTextbox.AppendText($"Free Memory [MB]: {availableMemory}\n");
-                    computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}\n");
-                    computerInfoTextbox.AppendText($"OS Install Date: {osInstall}\n");
-
+                SecureString securePassword = new SecureString(); //change the password to a secure string
+                foreach (char c in password) {
+                    securePassword.AppendChar(c);
                 }
 
-                //============== allComputerSystem ==============
-                foreach (CimInstance comp in allComputerSystem) {
-                    //======= User Logged In =======
-                    string userLoggedIn = "";
-                    try { Convert.ToString(comp.CimInstanceProperties["UserName"].Value); } catch { userLoggedIn = "None"; }
+                CimCredential Credentials = new CimCredential(PasswordAuthenticationMechanism.Default, domain, username, securePassword);
+
+                WSManSessionOptions SessionOptions = new WSManSessionOptions();
+                SessionOptions.AddDestinationCredentials(Credentials);
+
+                CimSession Session = CimSession.Create(computerName, SessionOptions);
+
+                //var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
+                //========================================== PROGRAMS ===================================================
+
+                int totalPrograms = 0;
+
+                if (programCheckbox.IsChecked == true) {
+                    var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
+                    foreach (CimInstance program in allPrograms) {
+                        string text = Convert.ToString(program.CimInstanceProperties["Name"].Value);
+                        outputTextbox.AppendText(text + "\n");
+                        totalPrograms++;
+                    }
+                }
+
+                totalLabel.Content = $"Total Programs: {totalPrograms}";
+                //========================================== DISK INFO ===================================================
+                if (diskInfoCheckbox.IsChecked == true) {
+                    var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
+                    foreach (CimInstance pDisk in allPDisks) {
+                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
+                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
+                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
+                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
+                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
+                    }
+                }
+                //======================================= COMPUTER INFO ===================================================
+                if (computerInfoCheckbox.IsChecked == true) {
+                    var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+                    var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+
+                    //============== allOS ==============
+                    foreach (CimInstance os in allOS) {
+                        //======= Available Memory =======
+                        string availableMemory = Convert.ToString(Convert.ToDouble(os.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 10));
+                        availableMemory = Convert.ToString(Math.Round(Convert.ToDouble(availableMemory), 0, MidpointRounding.AwayFromZero));
+                        //======= Last Boot Up Time =======
+                        DateTime lastBootUpTimeDate = Convert.ToDateTime(os.CimInstanceProperties["LastBootUpTime"].Value);
+                        string lastBootUpTime = lastBootUpTimeDate.ToString(@"yyyy-MM-dd hh:mm:ss");
+                        //======= Operating System =======
+                        string osName = Convert.ToString(os.CimInstanceProperties["Caption"].Value);
+                        //======= OS Install Date =======
+                        DateTime osInstallDate = Convert.ToDateTime(os.CimInstanceProperties["InstallDate"].Value);
+                        string osInstall = osInstallDate.ToString(@"yyyy-MM-dd hh:mm:ss");
+                        //======= OS Version =======
+                        string version = Convert.ToString(os.CimInstanceProperties["Version"].Value);
+
+                        computerInfoTextbox.AppendText($"Operating System: {osName}\n");
+                        computerInfoTextbox.AppendText($"Windows Version: {version}\n");
+                        computerInfoTextbox.AppendText($"Free Memory [MB]: {availableMemory}\n");
+                        computerInfoTextbox.AppendText($"Last Boot Up Time: {lastBootUpTime}\n");
+                        computerInfoTextbox.AppendText($"OS Install Date: {osInstall}\n");
+
+                    }
+
+                    //============== allComputerSystem ==============
+                    foreach (CimInstance comp in allComputerSystem) {
+                        //======= User Logged In =======
+                        string userLoggedIn = "";
+                        try { Convert.ToString(comp.CimInstanceProperties["UserName"].Value); } catch { userLoggedIn = "None"; }
 
 
-                    computerInfoTextbox.AppendText($"User Logged In: {userLoggedIn}\n");
+                        computerInfoTextbox.AppendText($"User Logged In: {userLoggedIn}\n");
+
+                    }
 
                 }
+            } else {
+
+                computerNameValidLabel.Content = "Computer Name Invalid";
+                computerNameValidLabel.Foreground = Brushes.Red;
+
             }
         }
 
@@ -144,6 +190,40 @@ namespace RemoteComputerInfo {
                     outputTextbox.AppendText(line);
                 }
             }*/
+
+        }
+
+        private void runComputerButton1_Click(object sender, RoutedEventArgs e) {
+
+            string computerName = computerMonitoringTextbox1.Text;
+
+            if (validateComputerName(computerName) == true) {
+
+                computerMonitorLabel1.Content = $"Pinging {computerName}";
+                computerMonitorLabel1.Foreground = Brushes.Orange;
+
+                bool ping = pingHost(computerName);
+
+                if (ping == true) {
+
+                    computerMonitorLabel1.Content = $"Connection to {computerName} successful";
+                    computerMonitorLabel1.Foreground = Brushes.Green;
+
+                    computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}");
+
+
+                } else {
+                    computerMonitorLabel1.Content = $"Could not Connect to {computerName}";
+                    computerMonitorLabel1.Foreground = Brushes.Red;
+                }
+
+
+            } else {
+
+                computerMonitorLabel1.Content = "Computer Name Invalid";
+                computerMonitorLabel1.Foreground = Brushes.Red;
+
+            }
 
         }
     }
