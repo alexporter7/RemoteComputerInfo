@@ -196,6 +196,11 @@ namespace RemoteComputerInfo {
         private void runComputerButton1_Click(object sender, RoutedEventArgs e) {
 
             string computerName = computerMonitoringTextbox1.Text;
+            string domain = "net.ucf.edu";
+            string username = usernameTextbox.Text;
+            string password = passwordTextbox.Password;
+
+            double refreshRate = 2;
 
             if (validateComputerName(computerName) == true) {
 
@@ -209,12 +214,63 @@ namespace RemoteComputerInfo {
                     computerMonitorLabel1.Content = $"Connection to {computerName} successful";
                     computerMonitorLabel1.Foreground = Brushes.Green;
 
-                    computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}");
+                    computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}\n");
+
+                    //============== CIM Instance Query Setup ==============
+
+                    SecureString securePassword = new SecureString(); //change the password to a secure string
+                    foreach (char c in password) {
+                        securePassword.AppendChar(c);
+                    }
+
+                    CimCredential Credentials = new CimCredential(PasswordAuthenticationMechanism.Default, domain, username, securePassword);
+
+                    WSManSessionOptions SessionOptions = new WSManSessionOptions();
+                    SessionOptions.AddDestinationCredentials(Credentials);
+
+                    CimSession Session = CimSession.Create(computerName, SessionOptions);
+
+                    var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+
+                    //============== Name, IP Address, Disk Space ==============
+
+
+                    //============== RAM ==============
+
+                    double freeRam = 0;
+                    double totalRam = 0;
+                    double usedRam = 0;
+                    double ramPercentage = 0;
+
+                    foreach (CimInstance o in allComputerSystem) {
+                        freeRam = Convert.ToDouble(o.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 20);
+                        totalRam = Convert.ToDouble(o.CimInstanceProperties["TotalVisibleMemorySize"].Value) / Math.Pow(2, 20);
+
+                        usedRam = (totalRam - freeRam);
+
+                        freeRam = Math.Round(freeRam, 3);
+                        usedRam = Math.Round(usedRam, 3);
+                        totalRam = Math.Round(totalRam, 3);
+                        
+                        computerMonitorInfoTextbox1.AppendText(Convert.ToString(usedRam) + " GB\n");
+                        computerMonitorInfoTextbox1.AppendText(Convert.ToString(totalRam) + " GB\n");
+
+                    }
+
+                    ramPercentage = (usedRam / totalRam) * 100;
+                    ramPercentage = Math.Round(ramPercentage, 3);
+
+                    liveRamProgressBar1.Value = ramPercentage;
+                    ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
+
+                    //============== Processes ==============
 
 
                 } else {
+
                     computerMonitorLabel1.Content = $"Could not Connect to {computerName}";
                     computerMonitorLabel1.Foreground = Brushes.Red;
+
                 }
 
 
