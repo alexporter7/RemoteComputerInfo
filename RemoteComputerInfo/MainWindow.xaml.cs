@@ -47,11 +47,13 @@ namespace RemoteComputerInfo {
                 PingReply response = connectionResponse.Send(host);
                 return (response.Status == IPStatus.Success);
 
-            } catch {
+            }
+            catch {
 
                 return false;
 
-            } finally {
+            }
+            finally {
 
                 if (connectionResponse != null) {
                     connectionResponse.Dispose();
@@ -68,7 +70,7 @@ namespace RemoteComputerInfo {
             outputTextbox.Text = "";
             diskInfoTextbox.Text = "";
             computerInfoTextbox.Text = "";
-            
+
             //computer name, domain, username, and password
             //used to actually connect to a machine and authenticate
             string computerName = computerNameTextbox.Text;
@@ -159,7 +161,8 @@ namespace RemoteComputerInfo {
                     }
 
                 }
-            } else {
+            }
+            else {
 
                 computerNameValidLabel.Content = "Computer Name Invalid";
                 computerNameValidLabel.Foreground = Brushes.Red;
@@ -169,27 +172,27 @@ namespace RemoteComputerInfo {
 
         private void filterProgramsTextbox_TextChanged(object sender, TextChangedEventArgs e) {
 
-/*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            //outputTextbox.Text = "";
+            /*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        //outputTextbox.Text = "";
 
-            foreach (string line in lines) {
-                if (line.Contains(filterProgramsTextbox.Text)) {
-                    outputTextbox.AppendText(line);
-                }
-            }
-            */
+                        foreach (string line in lines) {
+                            if (line.Contains(filterProgramsTextbox.Text)) {
+                                outputTextbox.AppendText(line);
+                            }
+                        }
+                        */
         }
 
         private void filterButtonSubmit_Click(object sender, RoutedEventArgs e) {
 
-/*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            outputTextbox.Text = "";
+            /*            string[] lines = outputTextbox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                        outputTextbox.Text = "";
 
-            foreach (string line in lines) {
-                if (line.Contains(filterProgramsTextbox.Text)) {
-                    outputTextbox.AppendText(line);
-                }
-            }*/
+                        foreach (string line in lines) {
+                            if (line.Contains(filterProgramsTextbox.Text)) {
+                                outputTextbox.AppendText(line);
+                            }
+                        }*/
 
         }
 
@@ -202,85 +205,95 @@ namespace RemoteComputerInfo {
 
             double refreshRate = 2;
 
-            if (validateComputerName(computerName) == true) {
+            if (runComputerButton1.Content.Equals("Connect")) {
 
-                computerMonitorLabel1.Content = $"Pinging {computerName}";
-                computerMonitorLabel1.Foreground = Brushes.Orange;
+                if (validateComputerName(computerName) == true) {
 
-                bool ping = pingHost(computerName);
+                    computerMonitorLabel1.Content = $"Pinging {computerName}";
+                    computerMonitorLabel1.Foreground = Brushes.Orange;
 
-                if (ping == true) {
+                    bool ping = pingHost(computerName);
 
-                    computerMonitorLabel1.Content = $"Connection to {computerName} successful";
-                    computerMonitorLabel1.Foreground = Brushes.Green;
+                    if (ping == true) {
 
-                    computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}\n");
+                        runComputerButton1.Content = "Disconnect";
 
-                    //============== CIM Instance Query Setup ==============
+                        computerMonitorLabel1.Content = $"Connection to {computerName} successful";
+                        computerMonitorLabel1.Foreground = Brushes.Green;
 
-                    SecureString securePassword = new SecureString(); //change the password to a secure string
-                    foreach (char c in password) {
-                        securePassword.AppendChar(c);
+                        computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}\n");
+
+                        //============== CIM Instance Query Setup ==============
+
+                        SecureString securePassword = new SecureString(); //change the password to a secure string
+                        foreach (char c in password) {
+                            securePassword.AppendChar(c);
+                        }
+
+                        CimCredential Credentials = new CimCredential(PasswordAuthenticationMechanism.Default, domain, username, securePassword);
+
+                        WSManSessionOptions SessionOptions = new WSManSessionOptions();
+                        SessionOptions.AddDestinationCredentials(Credentials);
+
+                        CimSession Session = CimSession.Create(computerName, SessionOptions);
+
+                        var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+
+                        //============== Name, IP Address, Disk Space ==============
+
+
+                        //============== RAM ==============
+
+                        double freeRam = 0;
+                        double totalRam = 0;
+                        double usedRam = 0;
+                        double ramPercentage = 0;
+
+                        foreach (CimInstance o in allComputerSystem) {
+                            freeRam = Convert.ToDouble(o.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 20);
+                            totalRam = Convert.ToDouble(o.CimInstanceProperties["TotalVisibleMemorySize"].Value) / Math.Pow(2, 20);
+
+                            usedRam = (totalRam - freeRam);
+
+                            freeRam = Math.Round(freeRam, 3);
+                            usedRam = Math.Round(usedRam, 3);
+                            totalRam = Math.Round(totalRam, 3);
+
+                            computerMonitorInfoTextbox1.AppendText(Convert.ToString(usedRam) + " GB\n");
+                            computerMonitorInfoTextbox1.AppendText(Convert.ToString(totalRam) + " GB\n");
+
+                        }
+
+                        ramPercentage = (usedRam / totalRam) * 100;
+                        ramPercentage = Math.Round(ramPercentage, 3);
+
+                        liveRamProgressBar1.Value = ramPercentage;
+                        ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
+
+                        //============== Processes ==============
+
+
+                    }
+                    else { // ======= If ping has failed =======
+
+                        computerMonitorLabel1.Content = $"Could not Connect to {computerName}";
+                        computerMonitorLabel1.Foreground = Brushes.Red;
+
                     }
 
-                    CimCredential Credentials = new CimCredential(PasswordAuthenticationMechanism.Default, domain, username, securePassword);
 
-                    WSManSessionOptions SessionOptions = new WSManSessionOptions();
-                    SessionOptions.AddDestinationCredentials(Credentials);
+                }
+                else { //======= If computer name was not valid =======
 
-                    CimSession Session = CimSession.Create(computerName, SessionOptions);
-
-                    var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
-
-                    //============== Name, IP Address, Disk Space ==============
-
-
-                    //============== RAM ==============
-
-                    double freeRam = 0;
-                    double totalRam = 0;
-                    double usedRam = 0;
-                    double ramPercentage = 0;
-
-                    foreach (CimInstance o in allComputerSystem) {
-                        freeRam = Convert.ToDouble(o.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 20);
-                        totalRam = Convert.ToDouble(o.CimInstanceProperties["TotalVisibleMemorySize"].Value) / Math.Pow(2, 20);
-
-                        usedRam = (totalRam - freeRam);
-
-                        freeRam = Math.Round(freeRam, 3);
-                        usedRam = Math.Round(usedRam, 3);
-                        totalRam = Math.Round(totalRam, 3);
-                        
-                        computerMonitorInfoTextbox1.AppendText(Convert.ToString(usedRam) + " GB\n");
-                        computerMonitorInfoTextbox1.AppendText(Convert.ToString(totalRam) + " GB\n");
-
-                    }
-
-                    ramPercentage = (usedRam / totalRam) * 100;
-                    ramPercentage = Math.Round(ramPercentage, 3);
-
-                    liveRamProgressBar1.Value = ramPercentage;
-                    ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
-
-                    //============== Processes ==============
-
-
-                } else {
-
-                    computerMonitorLabel1.Content = $"Could not Connect to {computerName}";
+                    computerMonitorLabel1.Content = "Computer Name Invalid";
                     computerMonitorLabel1.Foreground = Brushes.Red;
 
                 }
 
-
-            } else {
-
-                computerMonitorLabel1.Content = "Computer Name Invalid";
-                computerMonitorLabel1.Foreground = Brushes.Red;
+            }
+            else { //======= If button already says disconnect =======
 
             }
-
         }
     }
 }
