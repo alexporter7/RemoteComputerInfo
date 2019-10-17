@@ -17,6 +17,7 @@ using Microsoft.Management.Infrastructure;
 using Microsoft.Management.Infrastructure.Options;
 using System.Management;
 using System.Net.NetworkInformation;
+using System.Collections;
 
 namespace RemoteComputerInfo {
     /// <summary>
@@ -239,8 +240,16 @@ namespace RemoteComputerInfo {
 
                         var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
 
-                        //============== Name, IP Address, Disk Space ==============
+                        //============== Username ==============
 
+                        var allUserNames = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_ComputerSystem");
+
+                        foreach (CimInstance o in allUserNames) {
+
+                            userLoggedInLablel1.Content = "User Logged In: " + Convert.ToString(o.CimInstanceProperties["Username"].Value);
+                            computerMonitorInfoTextbox1.AppendText($"{userLoggedInLablel1.Content}\n");
+
+                        }
 
                         //============== RAM ==============
 
@@ -259,8 +268,8 @@ namespace RemoteComputerInfo {
                             usedRam = Math.Round(usedRam, 3);
                             totalRam = Math.Round(totalRam, 3);
 
-                            computerMonitorInfoTextbox1.AppendText(Convert.ToString(usedRam) + " GB\n");
-                            computerMonitorInfoTextbox1.AppendText(Convert.ToString(totalRam) + " GB\n");
+                            computerMonitorInfoTextbox1.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
+                            computerMonitorInfoTextbox1.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
 
                         }
 
@@ -271,6 +280,23 @@ namespace RemoteComputerInfo {
                         ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
 
                         //============== Processes ==============
+
+                        computerMonitorInfoTextbox1.AppendText("Scanning Processes...\n");
+
+                        var allProcessList = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Process");
+                        ArrayList processArrayList = new ArrayList();
+
+                        foreach (CimInstance o in allProcessList) {
+
+                            processArrayList.Add(Convert.ToString(o.CimInstanceProperties["Name"].Value));
+                            if (Convert.ToString(o.CimInstanceProperties["Name"].Value).Equals("svchost.exe") == false) {
+                                processComputerTextbox1.AppendText(Convert.ToString(o.CimInstanceProperties["Name"].Value) + "\n");
+                            }
+
+                        }
+
+                        processCountLabel1.Content = $"Total Processes: {processArrayList.Count}";
+                        computerMonitorInfoTextbox1.AppendText($"Process Count: {processArrayList.Count}");
 
 
                     }
