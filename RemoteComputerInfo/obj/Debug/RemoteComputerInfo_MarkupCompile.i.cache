@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\al086950\OneDrive - University of Central Florida\Visual Studios Projects\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\
+C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\
 RemoteComputerInfo
 none
 false
 DEBUG;TRACE
-C:\Users\al086950\OneDrive - University of Central Florida\Visual Studios Projects\RemoteComputerInfo\RemoteComputerInfo\App.xaml
-11151548125
+C:\Git\RemoteComputerInfo\RemoteComputerInfo\App.xaml
+2-1452161638
 
-61135111526
+7-389085239
 15-1784812042
-MainWindow.xaml;
+LoginScreen.xaml;MainWindow.xaml;
 
-True
+False
 

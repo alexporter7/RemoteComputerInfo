@@ -23,10 +23,29 @@ namespace RemoteComputerInfo {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
     public partial class MainWindow : Window {
+
+        public static string username = "";
+        public static string password = "";
+
         public MainWindow() {
+            
             InitializeComponent();
-            usernameTextbox.Text = "al086950admin";
+            
+            if (username.Equals("") == true || password.Equals("") == true ) {
+
+                LoginScreen form = new LoginScreen();
+                this.Hide();
+                form.ShowDialog();
+                this.Show();
+
+                username = form.usernameBox.Text;
+                password = form.passwordBox.Password;
+
+            }
+
         }
 
         public static bool validateComputerName(string name) {
@@ -76,8 +95,9 @@ namespace RemoteComputerInfo {
             //used to actually connect to a machine and authenticate
             string computerName = computerNameTextbox.Text;
             string domain = "net.ucf.edu";
-            string username = usernameTextbox.Text;
-            string password = passwordTextbox.Password;
+
+/*            string username = usernameTextbox.Text;
+            string password = passwordTextbox.Password;*/
 
             if (validateComputerName(computerName) == true) {
 
@@ -201,8 +221,9 @@ namespace RemoteComputerInfo {
 
             string computerName = computerMonitoringTextbox1.Text;
             string domain = "net.ucf.edu";
-            string username = usernameTextbox.Text;
-            string password = passwordTextbox.Password;
+            
+/*            string username = usernameTextbox.Text;
+            string password = passwordTextbox.Password;*/
 
             double refreshRate = 2;
 

@@ -8,16 +8,12 @@
         Title="Remote Computer Info" Height="656.798" Width="1463.934">
     <Grid>
         <TabControl HorizontalAlignment="Left" Height="606" Margin="10,10,0,0" VerticalAlignment="Top" Width="1436">
-            <TabItem Header="Information">
+            <TabItem Header="Remote Information">
                 <Grid Background="White">
                     <Button x:Name="submitNameButton" Content="Run" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="submitNameButton_Click"/>
                     <TextBox x:Name="computerNameTextbox" HorizontalAlignment="Left" Height="23" Margin="116,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
                     <Label x:Name="computerNameLabel" Content="Computer Name:" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="outputTextbox" HorizontalAlignment="Left" Height="318" Margin="10,220,0,-38" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
-                    <TextBox x:Name="usernameTextbox" HorizontalAlignment="Left" Height="23" Margin="406,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-                    <PasswordBox x:Name="passwordTextbox" HorizontalAlignment="Left" Margin="598,12,0,0" VerticalAlignment="Top" Width="184" Height="23" PasswordChar="*"/>
-                    <Label Content="Username:" HorizontalAlignment="Left" Margin="335,8,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Password:" HorizontalAlignment="Left" Margin="531,10,0,0" VerticalAlignment="Top"/>
                     <Label Content="Filter:" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="filterProgramsTextbox" HorizontalAlignment="Left" Height="23" Margin="54,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="328" TextChanged="filterProgramsTextbox_TextChanged"/>
                     <TextBox x:Name="diskInfoTextbox" HorizontalAlignment="Left" Height="134" Margin="494,404,0,-38" TextWrapping="Wrap" VerticalAlignment="Top" Width="468"/>
@@ -50,6 +46,7 @@
                     <Label x:Name="processCountLabel1" Content="Total Processes:" HorizontalAlignment="Left" Margin="10,542,0,0" VerticalAlignment="Top" Width="315"/>
                 </Grid>
             </TabItem>
+            <TabItem Content="" Header="Local Information"/>
         </TabControl>
     </Grid>
 </Window>
