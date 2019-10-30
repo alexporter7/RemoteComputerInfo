@@ -96,7 +96,7 @@ namespace RemoteComputerInfo {
             string computerName = computerNameTextbox.Text;
             string domain = "net.ucf.edu";
 
-/*            string username = usernameTextbox.Text;
+/*          string username = usernameTextbox.Text;
             string password = passwordTextbox.Password;*/
 
             if (validateComputerName(computerName) == true) {
@@ -116,6 +116,48 @@ namespace RemoteComputerInfo {
                 CimSession Session = CimSession.Create(computerName, SessionOptions);
 
                 //var allVolumes = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Volume");
+
+                //========================================== USERNAME ===================================================
+
+                var allUserNames = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_ComputerSystem");
+
+                foreach (CimInstance o in allUserNames) {
+
+                    userLoggedInLablel1.Content = "User Logged In: " + Convert.ToString(o.CimInstanceProperties["Username"].Value);
+                    computerMonitorInfoTextbox1.AppendText($"{userLoggedInLablel1.Content}\n");
+
+                }
+
+                //========================================== RAM ===================================================
+
+                var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+
+                double freeRam = 0;
+                double totalRam = 0;
+                double usedRam = 0;
+                double ramPercentage = 0;
+
+                foreach (CimInstance o in allComputerSystem) {
+                    freeRam = Convert.ToDouble(o.CimInstanceProperties["FreePhysicalMemory"].Value) / Math.Pow(2, 20);
+                    totalRam = Convert.ToDouble(o.CimInstanceProperties["TotalVisibleMemorySize"].Value) / Math.Pow(2, 20);
+
+                    usedRam = (totalRam - freeRam);
+
+                    freeRam = Math.Round(freeRam, 3);
+                    usedRam = Math.Round(usedRam, 3);
+                    totalRam = Math.Round(totalRam, 3);
+
+                    computerMonitorInfoTextbox1.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
+                    computerMonitorInfoTextbox1.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
+
+                }
+
+                ramPercentage = (usedRam / totalRam) * 100;
+                ramPercentage = Math.Round(ramPercentage, 3);
+
+                liveRamProgressBar1.Value = ramPercentage;
+                ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
+
                 //========================================== PROGRAMS ===================================================
 
                 int totalPrograms = 0;
@@ -144,7 +186,7 @@ namespace RemoteComputerInfo {
                 //======================================= COMPUTER INFO ===================================================
                 if (computerInfoCheckbox.IsChecked == true) {
                     var allOS = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
-                    var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
+                    //var allComputerSystem = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_OperatingSystem");
 
                     //============== allOS ==============
                     foreach (CimInstance os in allOS) {
@@ -182,6 +224,27 @@ namespace RemoteComputerInfo {
                     }
 
                 }
+
+                if (processCheckbox.IsChecked == true) {
+
+                    var allProcessList = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Process");
+                    ArrayList processArrayList = new ArrayList();
+
+                    foreach (CimInstance o in allProcessList) {
+
+                        processArrayList.Add(Convert.ToString(o.CimInstanceProperties["Name"].Value));
+                        if (Convert.ToString(o.CimInstanceProperties["Name"].Value).Equals("svchost.exe") == false) {
+                            processComputerTextbox1.AppendText(Convert.ToString(o.CimInstanceProperties["Name"].Value) + "\n");
+                        }
+
+                    }
+
+                    processCountLabel1.Content = $"Total Processes: {processArrayList.Count}";
+                    computerMonitorInfoTextbox1.AppendText($"Process Count: {processArrayList.Count}");
+
+                }
+
+
             }
             else {
 

@@ -10,10 +10,10 @@
         <TabControl HorizontalAlignment="Left" Height="606" Margin="10,10,0,0" VerticalAlignment="Top" Width="1436">
             <TabItem Header="Remote Information">
                 <Grid Background="White">
-                    <Button x:Name="submitNameButton" Content="Run" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="submitNameButton_Click"/>
+                    <Button x:Name="submitNameButton" Content="Connect" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="178" Height="22" Click="submitNameButton_Click"/>
                     <TextBox x:Name="computerNameTextbox" HorizontalAlignment="Left" Height="23" Margin="116,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
                     <Label x:Name="computerNameLabel" Content="Computer Name:" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="outputTextbox" HorizontalAlignment="Left" Height="318" Margin="10,220,0,-38" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
+                    <TextBox x:Name="outputTextbox" HorizontalAlignment="Left" Height="318" Margin="10,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
                     <Label Content="Filter:" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="filterProgramsTextbox" HorizontalAlignment="Left" Height="23" Margin="54,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="328" TextChanged="filterProgramsTextbox_TextChanged"/>
                     <TextBox x:Name="diskInfoTextbox" HorizontalAlignment="Left" Height="134" Margin="494,404,0,-38" TextWrapping="Wrap" VerticalAlignment="Top" Width="468"/>
@@ -24,26 +24,18 @@
                     <CheckBox x:Name="diskInfoCheckbox" Content="Disk Info" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="computerInfoCheckbox" Content="Computer Info" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>
                     <Label Content="Computer Info" HorizontalAlignment="Left" Margin="494,187,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="totalLabel" Content="Total: 0" HorizontalAlignment="Left" Margin="11,543,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="totalLabel" Content="Total Programs: 0" HorizontalAlignment="Left" Margin="11,543,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="computerNameValidLabel" Content="" HorizontalAlignment="Left" Margin="116,31,0,0" VerticalAlignment="Top" Width="200"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Remote Monitoring">
-                <Grid Background="White">
-                    <Button x:Name="runComputerButton1" Content="Connect" HorizontalAlignment="Left" Margin="250,9,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="runComputerButton1_Click"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Computer Name:" VerticalAlignment="Top"/>
-                    <TextBox x:Name="computerMonitoringTextbox1" HorizontalAlignment="Left" Height="23" Margin="106,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
-                    <Label x:Name="computerMonitorLabel1" Content="Waiting to Connect..." HorizontalAlignment="Left" Margin="106,32,0,0" VerticalAlignment="Top" Width="219"/>
-                    <TextBox x:Name="computerMonitorInfoTextbox1" HorizontalAlignment="Left" Height="149" Margin="10,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315"/>
-                    <Label Content="Output" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top"/>
-                    <ProgressBar x:Name="liveRamProgressBar1" HorizontalAlignment="Left" Height="21" Margin="10,289,0,0" VerticalAlignment="Top" Width="315"/>
-                    <Label Content="RAM:" HorizontalAlignment="Left" Margin="10,263,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="ramComputerLabel1" Content="" HorizontalAlignment="Left" Margin="53,263,0,0" VerticalAlignment="Top" Width="272"/>
-                    <Label Content="Processes" HorizontalAlignment="Left" Margin="10,309,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="processComputerTextbox1" HorizontalAlignment="Left" Height="207" Margin="10,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315"/>
-                    <Label x:Name="processComputerLabel1" Content="" HorizontalAlignment="Left" Margin="71,327,0,0" VerticalAlignment="Top" Width="254"/>
-                    <Label x:Name="userLoggedInLablel1" Content="User Logged In:" HorizontalAlignment="Left" Margin="10,239,0,0" VerticalAlignment="Top" Width="315"/>
-                    <Label x:Name="processCountLabel1" Content="Total Processes:" HorizontalAlignment="Left" Margin="10,542,0,0" VerticalAlignment="Top" Width="315"/>
+                    <TextBox x:Name="computerMonitorInfoTextbox1" HorizontalAlignment="Left" Height="142" Margin="494,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
+                    <Label Content="Output" HorizontalAlignment="Left" Margin="494,8,0,0" VerticalAlignment="Top" Height="25" Width="81"/>
+                    <ProgressBar x:Name="liveRamProgressBar1" HorizontalAlignment="Left" Height="21" Margin="10,138,0,0" VerticalAlignment="Top" Width="315"/>
+                    <Label Content="RAM:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Processes" HorizontalAlignment="Left" Margin="968,6,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="processComputerTextbox1" HorizontalAlignment="Left" Height="493" Margin="979,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315"/>
+                    <Label x:Name="userLoggedInLablel1" Content="User Logged In:" HorizontalAlignment="Left" Margin="11,159,0,0" VerticalAlignment="Top" Width="236"/>
+                    <Label x:Name="processCountLabel1" Content="Total Processes:" HorizontalAlignment="Left" Margin="968,543,0,0" VerticalAlignment="Top" Width="315"/>
+                    <CheckBox x:Name="processCheckbox" Content="Processes" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="ramComputerLabel1" Content="" HorizontalAlignment="Left" Margin="48,112,0,0" VerticalAlignment="Top" Width="272"/>
                 </Grid>
             </TabItem>
             <TabItem Content="" Header="Local Information"/>
