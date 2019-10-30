@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteComputerInfo"
         mc:Ignorable="d"
-        Title="Remote Computer Info" Height="611.798" Width="1322.934">
+        Title="Remote Computer Info" Height="613" Width="1324" MinWidth="1324" MinHeight="613" MaxWidth="1324" MaxHeight="613">
     <Grid>
         <Button x:Name="submitNameButton" Content="Connect" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="178" Height="22" Click="submitNameButton_Click"/>
         <TextBox x:Name="computerNameTextbox" HorizontalAlignment="Left" Height="23" Margin="116,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
