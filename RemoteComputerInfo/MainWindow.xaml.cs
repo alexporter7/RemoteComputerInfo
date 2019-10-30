@@ -101,7 +101,7 @@ namespace RemoteComputerInfo {
 
             if (validateComputerName(computerName) == true) {
 
-                computerNameValidLabel.Content = "";
+                //computerNameValidLabel.Content = "";
 
                 SecureString securePassword = new SecureString(); //change the password to a secure string
                 foreach (char c in password) {
@@ -156,7 +156,7 @@ namespace RemoteComputerInfo {
                 ramPercentage = Math.Round(ramPercentage, 3);
 
                 liveRamProgressBar1.Value = ramPercentage;
-                ramComputerLabel1.Content = $"{usedRam} / {totalRam} GB | {ramPercentage}%";
+                ramComputerLabel1.Content = $"RAM: {usedRam} GB / {totalRam} GB | {ramPercentage}%";
 
                 //========================================== PROGRAMS ===================================================
 
@@ -248,8 +248,8 @@ namespace RemoteComputerInfo {
             }
             else {
 
-                computerNameValidLabel.Content = "Computer Name Invalid";
-                computerNameValidLabel.Foreground = Brushes.Red;
+                //computerNameValidLabel.Content = "Computer Name Invalid";
+                //computerNameValidLabel.Foreground = Brushes.Red;
 
             }
         }

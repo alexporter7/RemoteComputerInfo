@@ -48,3 +48,5 @@ C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\RemoteComputerInfo.csproj
 C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\RemoteComputerInfo.csproj.CopyComplete
 C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\RemoteComputerInfo.exe
 C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\RemoteComputerInfo.pdb
+C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\ExportForm.g.cs
+C:\Git\RemoteComputerInfo\RemoteComputerInfo\obj\Debug\ExportForm.baml
