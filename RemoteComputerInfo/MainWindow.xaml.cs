@@ -50,9 +50,9 @@ namespace RemoteComputerInfo {
 
         public static bool validateComputerName(string name) {
 
-            if (name.Length != 10) {
+            /*if (name.Length != 10) {
                 return false;
-            }
+            }*/
 
             return true;
 
@@ -90,6 +90,7 @@ namespace RemoteComputerInfo {
             outputTextbox.Text = "";
             diskInfoTextbox.Text = "";
             computerInfoTextbox.Text = "";
+            logTextbox.Text = "";
 
             //computer name, domain, username, and password
             //used to actually connect to a machine and authenticate
@@ -99,7 +100,9 @@ namespace RemoteComputerInfo {
 /*          string username = usernameTextbox.Text;
             string password = passwordTextbox.Password;*/
 
-            if (validateComputerName(computerName) == true) {
+            if (validateComputerName(computerName) == true && pingHost(computerName) == true) {
+
+                logTextbox.AppendText($"Ping Successful for {computerName}\n");
 
                 //computerNameValidLabel.Content = "";
 
@@ -124,7 +127,7 @@ namespace RemoteComputerInfo {
                 foreach (CimInstance o in allUserNames) {
 
                     userLoggedInLablel1.Content = "User Logged In: " + Convert.ToString(o.CimInstanceProperties["Username"].Value);
-                    computerMonitorInfoTextbox1.AppendText($"{userLoggedInLablel1.Content}\n");
+                    logTextbox.AppendText($"{userLoggedInLablel1.Content}\n");
 
                 }
 
@@ -147,8 +150,8 @@ namespace RemoteComputerInfo {
                     usedRam = Math.Round(usedRam, 3);
                     totalRam = Math.Round(totalRam, 3);
 
-                    computerMonitorInfoTextbox1.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
-                    computerMonitorInfoTextbox1.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
+                    logTextbox.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
+                    logTextbox.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
 
                 }
 
@@ -163,24 +166,39 @@ namespace RemoteComputerInfo {
                 int totalPrograms = 0;
 
                 if (programCheckbox.IsChecked == true) {
+
+                    logTextbox.AppendText("Importing Programs\n");
                     var allPrograms = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Product");
                     foreach (CimInstance program in allPrograms) {
                         string text = Convert.ToString(program.CimInstanceProperties["Name"].Value);
                         outputTextbox.AppendText(text + "\n");
                         totalPrograms++;
                     }
+
                 }
 
                 totalLabel.Content = $"Total Programs: {totalPrograms}";
+                logTextbox.AppendText($"Total Programs: {totalPrograms}\n");
                 //========================================== DISK INFO ===================================================
                 if (diskInfoCheckbox.IsChecked == true) {
+
+                    logTextbox.AppendText("Scanning Disk Drives\n");
                     var allPDisks = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_DiskDrive");
                     foreach (CimInstance pDisk in allPDisks) {
-                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Name"].ToString() + "\n");
-                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Model"].ToString() + "\n");
-                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Status"].ToString() + "\n");
-                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["SerialNumber"].ToString() + "\n");
-                        diskInfoTextbox.AppendText(pDisk.CimInstanceProperties["Size"].ToString() + "\n");
+
+                        string diskName = Convert.ToString(pDisk.CimInstanceProperties["Name"].Value);
+                        string modelName = Convert.ToString(pDisk.CimInstanceProperties["Model"].Value);
+                        string status = Convert.ToString(pDisk.CimInstanceProperties["Status"].Value);
+                        string serialNumber = Convert.ToString(pDisk.CimInstanceProperties["SerialNumber"].Value);
+                        
+                        double size = Convert.ToDouble(pDisk.CimInstanceProperties["Size"].Value) / Math.Pow(2, 20);
+
+                        diskInfoTextbox.AppendText($"Name: {diskName}\n" +
+                            $"Model: {modelName}\n" +
+                            $"Status: {status}\n" +
+                            $"Serial Number: {serialNumber}\n" +
+                            $"Size: {Math.Round(size, 3)} GB");
+                    
                     }
                 }
                 //======================================= COMPUTER INFO ===================================================
@@ -240,7 +258,7 @@ namespace RemoteComputerInfo {
                     }
 
                     processCountLabel1.Content = $"Total Processes: {processArrayList.Count}";
-                    computerMonitorInfoTextbox1.AppendText($"Process Count: {processArrayList.Count}");
+                    logTextbox.AppendText($"Process Count: {processArrayList.Count}");
 
                 }
 
@@ -306,7 +324,7 @@ namespace RemoteComputerInfo {
                         computerMonitorLabel1.Content = $"Connection to {computerName} successful";
                         computerMonitorLabel1.Foreground = Brushes.Green;
 
-                        computerMonitorInfoTextbox1.AppendText($"Connected to {computerName}\n");
+                        logTextbox.AppendText($"Connected to {computerName}\n");
 
                         //============== CIM Instance Query Setup ==============
 
@@ -331,7 +349,7 @@ namespace RemoteComputerInfo {
                         foreach (CimInstance o in allUserNames) {
 
                             userLoggedInLablel1.Content = "User Logged In: " + Convert.ToString(o.CimInstanceProperties["Username"].Value);
-                            computerMonitorInfoTextbox1.AppendText($"{userLoggedInLablel1.Content}\n");
+                            logTextbox.AppendText($"{userLoggedInLablel1.Content}\n");
 
                         }
 
@@ -352,8 +370,8 @@ namespace RemoteComputerInfo {
                             usedRam = Math.Round(usedRam, 3);
                             totalRam = Math.Round(totalRam, 3);
 
-                            computerMonitorInfoTextbox1.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
-                            computerMonitorInfoTextbox1.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
+                            logTextbox.AppendText($"Used RAM: {Convert.ToString(usedRam)} GB\n");
+                            logTextbox.AppendText($"Total RAM: {Convert.ToString(totalRam)} GB\n");
 
                         }
 
@@ -365,7 +383,7 @@ namespace RemoteComputerInfo {
 
                         //============== Processes ==============
 
-                        computerMonitorInfoTextbox1.AppendText("Scanning Processes...\n");
+                        logTextbox.AppendText("Scanning Processes...\n");
 
                         var allProcessList = Session.QueryInstances(@"root\cimv2", "WQL", "SELECT * FROM Win32_Process");
                         ArrayList processArrayList = new ArrayList();
@@ -380,7 +398,7 @@ namespace RemoteComputerInfo {
                         }
 
                         processCountLabel1.Content = $"Total Processes: {processArrayList.Count}";
-                        computerMonitorInfoTextbox1.AppendText($"Process Count: {processArrayList.Count}");
+                        logTextbox.AppendText($"Process Count: {processArrayList.Count}");
 
 
                     }

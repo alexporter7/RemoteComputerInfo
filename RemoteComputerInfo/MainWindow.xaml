@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteComputerInfo"
         mc:Ignorable="d"
-        Title="Remote Computer Info" Height="656.798" Width="1463.934">
+        Title="Remote Computer Info" Height="611.798" Width="1322.934">
     <Grid>
         <Button x:Name="submitNameButton" Content="Connect" HorizontalAlignment="Left" Margin="241,10,0,0" VerticalAlignment="Top" Width="178" Height="22" Click="submitNameButton_Click"/>
         <TextBox x:Name="computerNameTextbox" HorizontalAlignment="Left" Height="23" Margin="116,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
@@ -22,7 +22,7 @@
         <CheckBox x:Name="computerInfoCheckbox" Content="Computer Info" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top"/>
         <Label Content="Computer Info" HorizontalAlignment="Left" Margin="494,187,0,0" VerticalAlignment="Top"/>
         <Label x:Name="totalLabel" Content="Total Programs: 0" HorizontalAlignment="Left" Margin="11,543,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="computerMonitorInfoTextbox1" HorizontalAlignment="Left" Height="142" Margin="494,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
+        <TextBox x:Name="logTextbox" HorizontalAlignment="Left" Height="142" Margin="494,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="469"/>
         <Label Content="Output" HorizontalAlignment="Left" Margin="494,8,0,0" VerticalAlignment="Top" Height="25" Width="81"/>
         <ProgressBar x:Name="liveRamProgressBar1" HorizontalAlignment="Left" Height="44" Margin="10,138,0,0" VerticalAlignment="Top" Width="469"/>
         <Label x:Name="ramComputerLabel1" Content="RAM:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top"/>
