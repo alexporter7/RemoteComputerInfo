@@ -38,7 +38,9 @@
                     <Label x:Name="ramComputerLabel1" Content="" HorizontalAlignment="Left" Margin="48,112,0,0" VerticalAlignment="Top" Width="272"/>
                 </Grid>
             </TabItem>
-            <TabItem Content="" Header="Local Information"/>
+            <TabItem Header="Export">
+                <Grid Background="White"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

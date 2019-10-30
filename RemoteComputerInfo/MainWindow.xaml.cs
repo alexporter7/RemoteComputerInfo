@@ -282,11 +282,11 @@ namespace RemoteComputerInfo {
 
         private void runComputerButton1_Click(object sender, RoutedEventArgs e) {
 
-            string computerName = computerMonitoringTextbox1.Text;
+            /*string computerName = computerMonitoringTextbox1.Text;
             string domain = "net.ucf.edu";
             
-/*            string username = usernameTextbox.Text;
-            string password = passwordTextbox.Password;*/
+*//*            string username = usernameTextbox.Text;
+            string password = passwordTextbox.Password;*//*
 
             double refreshRate = 2;
 
@@ -403,7 +403,11 @@ namespace RemoteComputerInfo {
             }
             else { //======= If button already says disconnect =======
 
-            }
+            }*/
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
         }
     }
 }
