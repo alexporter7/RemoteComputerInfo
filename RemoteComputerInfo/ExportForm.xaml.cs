@@ -26,5 +26,30 @@ namespace RemoteComputerInfo {
            
 
         }
+
+        private void usernameTextbox_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (usernameTextbox.Text.Length > 0 && passwordTextbox.Password.Length > 0) {
+                emailButton.IsEnabled = true;
+                emailButton.Content = "Email";
+            } else {
+                emailButton.IsEnabled = false;
+                emailButton.Content = "Email [Enter Credentials To Enable]";
+            }
+
+        }
+
+        private void passwordTextbox_PasswordChanged(object sender, RoutedEventArgs e) {
+
+            if (usernameTextbox.Text.Length > 0 && passwordTextbox.Password.Length > 0) {
+                emailButton.IsEnabled = true;
+                emailButton.Content = "Email";
+            }
+            else {
+                emailButton.IsEnabled = false;
+                emailButton.Content = "Email [Enter Credentials To Enable]";
+            }
+
+        }
     }
 }

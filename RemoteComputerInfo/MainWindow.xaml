@@ -28,8 +28,9 @@
         <Label x:Name="ramComputerLabel1" Content="RAM:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top"/>
         <Label Content="Processes" HorizontalAlignment="Left" Margin="968,6,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="processComputerTextbox1" HorizontalAlignment="Left" Height="493" Margin="979,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="315"/>
-        <Label x:Name="userLoggedInLablel1" Content="User Logged In:" HorizontalAlignment="Left" Margin="116,34,0,0" VerticalAlignment="Top" Width="236"/>
+        <Label x:Name="userLoggedInLablel1" Content="User Logged In:" HorizontalAlignment="Left" Margin="116,62,0,0" VerticalAlignment="Top" Width="236"/>
         <Label x:Name="processCountLabel1" Content="Total Processes:" HorizontalAlignment="Left" Margin="968,543,0,0" VerticalAlignment="Top" Width="315"/>
         <CheckBox x:Name="processCheckbox" Content="Processes" HorizontalAlignment="Left" Margin="10,97,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="116,37,0,0" VerticalAlignment="Top" Width="303" Click="exportButton_Click" Height="25"/>
     </Grid>
 </Window>

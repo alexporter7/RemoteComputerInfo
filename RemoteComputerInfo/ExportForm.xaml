@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteComputerInfo"
         mc:Ignorable="d"
-        Title="ExportForm" Height="323.239" Width="388.028">
+        Title="ExportForm" Height="195.18" Width="393.327">
     <Grid>
-        <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="10,243,0,0" VerticalAlignment="Top" Width="360" Height="39"/>
-        <Button x:Name="emailButton" Content="Email" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="360" Height="39"/>
+        <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="10,111,0,0" VerticalAlignment="Top" Width="360" Height="39"/>
+        <Button x:Name="emailButton" Content="Email [Enter Credentials To Enable]" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="360" Height="39" IsEnabled="False"/>
+        <TextBox x:Name="usernameTextbox" HorizontalAlignment="Left" Height="23" Margin="80,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" TextChanged="usernameTextbox_TextChanged"/>
+        <Label Content="Email: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="65"/>
+        <Label Content="Password:" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="65"/>
+        <PasswordBox x:Name="passwordTextbox" HorizontalAlignment="Left" Margin="80,39,0,0" VerticalAlignment="Top" Width="290" Height="23" PasswordChanged="passwordTextbox_PasswordChanged"/>
     </Grid>
 </Window>

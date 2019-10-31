@@ -427,5 +427,12 @@ namespace RemoteComputerInfo {
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
         }
+
+        private void exportButton_Click(object sender, RoutedEventArgs e) {
+
+            ExportForm exportForm = new ExportForm();
+            exportForm.Show();
+
+        }
     }
 }
